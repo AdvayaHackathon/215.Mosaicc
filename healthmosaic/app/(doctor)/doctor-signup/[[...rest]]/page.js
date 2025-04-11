@@ -7,7 +7,7 @@ const SignUpPage = () => {
 
   return (<div className="flex items-center justify-center min-h-screen bg-gray-100">
     <div className="p-6 bg-white rounded-lg shadow-md">
-      <SignUp fallbackRedirectUrl="/patient-dashboard" path="/doctor-signup" />
+      <SignUp fallbackRedirectUrl="/doctor-dashboard" path="/doctor-signup" />
     </div>
   </div>)
 };
