@@ -43,14 +43,22 @@ export async function getPatient(userId) {
     return {
       success: true,
       patient: {
-        id: patient._id,
+        id: patient._id.toString(),
         name: patient.name,
         email: patient.email,
       },
       latestHealth: latestHealth ? {
         score: latestHealth.score,
-        date: latestHealth.createdAt,
+        date: latestHealth.createdAt.toISOString(),
         bmi: latestHealth.metrics?.bmi,
+        data: latestHealth.data ? {
+          age: latestHealth.data.age,
+          weight: latestHealth.data.weight,
+          height: latestHealth.data.height,
+          exercise: latestHealth.data.exercise,
+          sleep: latestHealth.data.sleep,
+          stress: latestHealth.data.stress
+        } : null
       } : null,
     };
   } catch (error) {
@@ -108,9 +116,9 @@ export async function calculateHealthScore(data,userId) {
       success: true,
       score,
       health: {
-        id: health._id,
+        id: health._id.toString(),
         score: health.score,
-        date: health.createdAt,
+        date: health.createdAt.toISOString(),
         bmi: health.metrics?.bmi,
       }
     };
@@ -146,11 +154,20 @@ export async function getHealthHistory(limit = 10,userId) {
     
     // Format records for client
     const formattedRecords = healthRecords.map(record => ({
-      id: record._id,
+      id: record._id.toString(),
       score: record.score,
-      date: record.createdAt,
+      // Convert Date object to ISO string for serialization
+      date: record.createdAt.toISOString(),
       bmi: record.metrics?.bmi,
-      data: record.data
+      // Ensure data object is serializable by creating a plain object
+      data: record.data ? {
+        age: record.data.age,
+        weight: record.data.weight,
+        height: record.data.height,
+        exercise: record.data.exercise,
+        sleep: record.data.sleep,
+        stress: record.data.stress
+      } : null
     }));
     
     return {
